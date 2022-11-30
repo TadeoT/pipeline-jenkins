@@ -1,12 +1,12 @@
 pipeline {
        agent any
        tools {
-                 maven 'maven-tool'
+                 maven 'maven'
         }
         environment {
                       PROJECT_ROOT = "practica-devops"
         }   
-}
+
     stages{
         stage ('Initialize') {
             steps {
@@ -23,16 +23,17 @@ pipeline {
                 }
             }
         }
+    }
         
-        post {
-            always {
-                    junit(
-                    allowEmptyResults: true,
-                        estResults: '*/test-reports/.xml'
-                    )
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
-                }
+    post {
+        always {
+            junit(
+                allowEmptyResults: true,
+                estResults: '*/test-reports/.xml'
+            )
+            success {
+                junit 'target/surefire-reports/**/*.xml' 
             }
         }
     }
+}
