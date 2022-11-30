@@ -29,7 +29,7 @@ pipeline {
         always {
             junit(
                 allowEmptyResults: true,
-                estResults: '*/test-reports/.xml'
+                testResults: '*/test-reports/.xml'
             )
             success {
                 junit 'target/surefire-reports/**/*.xml' 
