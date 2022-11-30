@@ -1,7 +1,5 @@
 pipeline{
-    agent{
-        label 'master'
-    }
+    agent
     stages{
         stage('paso-1'){
             steps{
