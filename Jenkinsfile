@@ -1,5 +1,5 @@
 pipeline{
-    agent none
+    agent {label 'linux-master' }
     stages{
         stage('paso-1'){
             steps{
