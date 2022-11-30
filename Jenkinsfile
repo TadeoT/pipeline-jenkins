@@ -5,6 +5,7 @@ pipeline{
             steps{
                 script{
                     sh "echo 'hello world'"
+                    sh 'java --version'
                 }
             }
         }
