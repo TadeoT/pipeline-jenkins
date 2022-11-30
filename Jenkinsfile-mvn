@@ -1,7 +1,7 @@
 pipeline {
        agent any
        tools {
-                 maven 'maven-tool'
+                 maven 'MAVEN'
         }
         environment {
                       PROJECT_ROOT = "practica-devops"
