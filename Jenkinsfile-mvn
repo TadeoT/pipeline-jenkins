@@ -1,0 +1,38 @@
+pipeline {
+       agent any
+       tools {
+                 maven 'maven-tool'
+        }
+        environment {
+                      PROJECT_ROOT = "practica-devops"
+        }   
+}
+    stages{
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                ''' 
+            }
+        }
+        stage ('Build') {
+            steps {
+                dir ("/home/tadeo/Descargas/spring-boot-form[interceptor_http]/spring-boot-form"){
+                    sh 'mvn -Dmaven.test.failure.ignore=true install' 
+                }
+            }
+        }
+        
+        post {
+            always {
+                    junit(
+                    allowEmptyResults: true,
+                        estResults: '*/test-reports/.xml'
+                    )
+                success {
+                    junit 'target/surefire-reports/**/*.xml' 
+                }
+            }
+        }
+    }
