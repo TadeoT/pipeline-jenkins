@@ -18,19 +18,16 @@ pipeline {
         }
         stage ('Build') {
             steps {
-                dir ("/home/tadeo/Descargas/spring-boot-form[interceptor_http]/spring-boot-form"){
-                    sh 'mvn -Dmaven.test.failure.ignore=true install' 
-                }
+                git branch 'master', url: 'https://github.com/TadeoT/api-spring.git'
+                
+                sh 'mvn -Dmaven.test.failure.ignore=true install' 
+                
             }
         }
     }
         
     post {
         always {
-            junit(
-                allowEmptyResults: true,
-                testResults: '*/test-reports/.xml'
-            )
             success {
                 junit 'target/surefire-reports/**/*.xml' 
             }
