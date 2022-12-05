@@ -3,8 +3,8 @@ pipeline {
        tools {
                  maven 'maven_atm'
         }
-        parameters{
-            choice choices: ['true','false'], description: "Install with test?", name 'TEST'
+        parameters {
+        booleanParam defaultValue: true, name: 'test'
         }
 
     stages{
@@ -20,7 +20,7 @@ pipeline {
            steps{
               git branch: 'master', url: 'https://github.com/TadeoT/api-spring.git'
                 script{
-                    if(${TEST} == 'true'){
+                    if(${params.test} == 'true'){
                         configFileProvider([configFile(fileId: '20ca5759-1558-4bec-b7e9-efb7ca87ac96', variable: 'MAVEN_SETTINGS_XML')]) {
                             sh 'mvn -U --batch-mode -s $MAVEN_SETTINGS_XML clean install -P foo'
                         }
