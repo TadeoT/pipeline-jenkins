@@ -19,9 +19,8 @@ pipeline {
         stage ('Build') {
             steps {
                 git branch: 'master', url: 'https://github.com/TadeoT/api-spring.git'
-                
-                sh 'mvn -Dmaven.test.failure.ignore=true install' 
-                
+                configFileProvider([configFile(fileId: '20ca5759-1558-4bec-b7e9-efb7ca87ac96', variable: 'MAVEN_SETTINGS_XML')]) {
+                     sh 'mvn -U --batch-mode -s $MAVEN_SETTINGS_XML clean install -P foo'
             }
         }
     }
