@@ -27,8 +27,7 @@ pipeline {
     }
     post{
         success{
-            def slackResponse = slackSend(channel: "jenkins", message: "Here is the primary message")
-            slackResponse.addReaction("thumbsup")
+            slackSend 'Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)'
         }
     }
         
