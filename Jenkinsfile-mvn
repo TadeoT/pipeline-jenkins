@@ -3,9 +3,9 @@ pipeline {
        tools {
                  maven 'maven_atm'
         }
-        environment {
-                      PROJECT_ROOT = "practica-devops"
-        }   
+        parameters{
+            choice choices: ['true','false'], description: "Install with test?", name 'TEST'
+        }
 
     stages{
         stage ('Initialize') {
@@ -19,9 +19,18 @@ pipeline {
         stage('Build'){
            steps{
               git branch: 'master', url: 'https://github.com/TadeoT/api-spring.git'
-              configFileProvider([configFile(fileId: '20ca5759-1558-4bec-b7e9-efb7ca87ac96', variable: 'MAVEN_SETTINGS_XML')]) {
-                   sh 'mvn -U --batch-mode -s $MAVEN_SETTINGS_XML clean install -P foo'
-               }
+                script{
+                    if(${TEST} == 'true'){
+                        configFileProvider([configFile(fileId: '20ca5759-1558-4bec-b7e9-efb7ca87ac96', variable: 'MAVEN_SETTINGS_XML')]) {
+                            sh 'mvn -U --batch-mode -s $MAVEN_SETTINGS_XML clean install -P foo'
+                        }
+                    }
+                    else{
+                        configFileProvider([configFile(fileId: '20ca5759-1558-4bec-b7e9-efb7ca87ac96', variable: 'MAVEN_SETTINGS_XML')]) {
+                            sh 'mvn -U --batch-mode -s $MAVEN_SETTINGS_XML clean install -DskipTests -P foo'
+                        }
+                    }
+                }
            }
        }
     }
