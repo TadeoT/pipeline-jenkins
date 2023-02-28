@@ -3,11 +3,11 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
-  environment {
+  //environment {
     //DOCKER_HUB_CREDS = credentials('darinpope-docker-hub')
     //AWS_CREDS = credentials('darinpope-aws-creds')
     //KEYCHAIN_PASSWORD = credentials('darinpope-keychain')
-  }
+  //}
   stages {
     stage('Tooling versions') {
       steps {
@@ -15,11 +15,6 @@ pipeline {
           docker --version
           docker compose version
         '''
-      }
-    }
-    stage('Build') {
-      steps {
-        //sh 'docker compose build'
       }
     }
     stage('Deploy') {
