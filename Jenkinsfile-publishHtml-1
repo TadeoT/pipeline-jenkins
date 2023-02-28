@@ -1,13 +1,16 @@
+
 pipeline {
-  agent any
+  agent { label 'linux_ubuntu' }
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   stages {
-    stage('Build') {
+    stage('Tooling versions') {
       steps {
-        sh './mvnw clean install site surefire-report:report'
-        sh 'tree'
+        sh '''
+          docker --version
+          docker compose version
+        '''
       }
     }
   }
