@@ -6,3 +6,29 @@ services:
       context: .
     ports:
       - "8088:8080"
+      
+  # contenedor mysql
+  mysql-server:
+    image: mysql:8.0.20
+    container_name: 'mysql-server'
+    restart: 'always'
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_ROOT_PASSWORD: desa
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./conf/mysql/my.cnf:/etc/mysql/conf.d/conf-my.cnf
+      - ./www:/var/www/desa
+  # contenedor phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: 'phpmyadmin-server'
+    restart: always
+    depends_on:
+      - mysql-server
+    ports:
+      - 91:80
+    environment:
+      - PMA_HOST=mysql-server
+
