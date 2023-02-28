@@ -1,13 +1,9 @@
 pipeline {
-  agent { label 'macos' }
+  agent { label 'linux_ubuntu' }
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
-  //environment {
-    //DOCKER_HUB_CREDS = credentials('darinpope-docker-hub')
-    //AWS_CREDS = credentials('darinpope-aws-creds')
-    //KEYCHAIN_PASSWORD = credentials('darinpope-keychain')
-  //}
+
   stages {
     stage('Tooling versions') {
       steps {
