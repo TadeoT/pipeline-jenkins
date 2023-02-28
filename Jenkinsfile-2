@@ -4,9 +4,9 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   environment {
-    DOCKER_HUB_CREDS = credentials('darinpope-docker-hub')
-    AWS_CREDS = credentials('darinpope-aws-creds')
-    KEYCHAIN_PASSWORD = credentials('darinpope-keychain')
+    //DOCKER_HUB_CREDS = credentials('darinpope-docker-hub')
+    //AWS_CREDS = credentials('darinpope-aws-creds')
+    //KEYCHAIN_PASSWORD = credentials('darinpope-keychain')
   }
   stages {
     stage('Tooling versions') {
@@ -17,29 +17,16 @@ pipeline {
         '''
       }
     }
-    stage('Unlock keychain') {
-      steps {
-        sh 'security -v unlock-keychain -p $KEYCHAIN_PASSWORD ~/Library/Keychains/login.keychain-db'
-      }
-    }
     stage('Build') {
       steps {
-        sh 'docker context use default'
-        sh 'docker compose build'
-        sh 'docker compose push'
+        //sh 'docker compose build'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'docker context use myecscontext'
         sh 'docker compose up'
         sh 'docker compose ps --format json'
       }
-    }
-  }
-  post {
-    always {
-        sh 'security -v lock-keychain ~/Library/Keychains/login.keychain-db'
     }
   }
 }
