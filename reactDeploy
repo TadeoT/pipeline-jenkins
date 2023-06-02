@@ -1,0 +1,49 @@
+try {
+
+  node('linux_ubuntu') {
+    env.npm_config_cache = 'npm-cache'
+    stage('Prepare') {
+        deleteDir()
+        git branch: 'master', credentialsId: 'f3e24d76-ac7b-400a-8c75-0eaa98983741', poll: false, url: 'https://github.com/TadeoT/react-docker.git'
+
+          docker.image("node:16-alpine").inside("-v $HOME/gradle-cache:/home/jenkins/.gradle") { c ->
+            sh """ 
+                node --version 
+                """
+            sh """ 
+                pwd 
+                """
+            sh """
+              npm install
+              """
+          }
+      
+    }
+
+    stage('Build Test') {
+
+            docker.image("node:16-alpine").inside("-v $HOME/gradle-cache:/home/jenkins/.gradle") { c ->
+            sh """
+              npm test
+              """
+          }
+        
+    }
+
+    stage('Build Prod') {
+
+        docker.image("node:16-alpine").inside("-v $HOME/gradle-cache:/home/jenkins/.gradle") { c ->
+            sh """
+              npm run build
+              """
+        }
+    }
+  }
+}
+catch(e) {
+  
+  if(!(e instanceof InterruptedException)) {
+    mail to: "${env.gitlabUserEmail}", body: "$JOB_URL",subject: "[Jenkins] $JOB_BASE_NAME: Ejecución $BUILD_NUMBER fallida"
+  }
+  throw e
+}

@@ -9,7 +9,8 @@ COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 
-RUN ./mvnw install -s .mvn/wrapper/settings.xml -DskipTests
+RUN ./mvnw install -s .mvn/wrapper/settings.xml
+ -DskipTests
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM adoptopenjdk/openjdk11:alpine-slim
